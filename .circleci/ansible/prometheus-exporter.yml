@@ -63,7 +63,7 @@
         append: true
         shell: /usr/sbin/nologin
         system: true
-        create_home: false
+        # create_home: false
     - name: create node exporter config dir
       file:
         path: "/etc/node_exporter"
