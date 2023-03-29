@@ -22,13 +22,19 @@
         name: python3
         state: latest
   tasks:
-    - name: "install node exporter."
-      become: true
+    # - name: "install node exporter."
+    #   become: true
+    #   unarchive:
+    #     src: https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+    #     dest: /tmp
+    #     remote_src: yes
+    #     mode: 'u+x,g+x,o+x'
+    - name: download and unzip node exporter if not exist
       unarchive:
         src: https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
         dest: /tmp
         remote_src: yes
-        mode: 'u+x,g+x,o+x'
+        validate_certs: no    
 
     - name: "move binary to /usr/local/bin."
       become: true
