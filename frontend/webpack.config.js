@@ -154,7 +154,7 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
       DEBUG: false,
-      API_URL: process.env.API_URL,
+      API_URL: "http://44.192.8.178:3030",
       WP_HELP_EMAIL: 'info@acklenavenue.com',
     }),
     new WebpackCleanupPlugin(),
@@ -168,7 +168,7 @@ module.exports = {
       template: 'assets/index.ejs',
       LOGGLY_TOKEN: process.env.LOGGLY_TOKEN,
       TITLE: process.env.TITLE || 'Welcome',
-      API_URL: process.env.API_URL,
+      API_URL: "http://44.192.8.178:3030",
       WP_HELP_EMAIL: process.env.WP_HELP_EMAIL,
     }),
   ],
