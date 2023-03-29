@@ -15,8 +15,8 @@ export class EmployeesService {
   private readonly employeesUrl: string;
   private readonly httpService: HttpService;
 
-  constructor(baseUrl = "http://44.192.8.178:3030") {
-    this.employeesUrl = `${baseUrl}/api/Employees`;
+  constructor(baseUrl = 'http://44.192.8.178:3030') {
+    this.employeesUrl = `http://44.192.8.178:3030/api/Employees`;
     this.httpService = new HttpService();
   }
 
