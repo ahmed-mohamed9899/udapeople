@@ -41,7 +41,7 @@
       become: true
       unarchive:
         src: "/tmp/node_exporter.tar.gz"
-        dest: /usr/local/bin/node_exporter
+        dest: /usr/local/bin
         remote_src: yes
         mode: '0777'
 
