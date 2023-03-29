@@ -22,21 +22,37 @@
         name: python3
         state: latest
   tasks:
-    - name: "install node exporter."
+    # - name: "install node exporter."
+    #   become: true
+    #   unarchive:
+    #     src: "https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar".gz.decode('utf-8')
+    #     dest: /tmp
+    #     remote_src: yes
+    #     mode: 'u+x,g+x,o+x'   
+
+    - name: Download Node Exporter
+      get_url:
+        url: "https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz"
+        dest: /tmp/node_exporter.tar.gz
+        remote_src: yes
+        mode: 'u+x,g+x,o+x'
+
+    - name: Extract Node Exporter
       become: true
       unarchive:
-        src: "https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar".gz.decode('utf-8')
-        dest: /tmp
-        remote_src: yes
-        mode: 'u+x,g+x,o+x'   
-
-    - name: "move binary to /usr/local/bin."
-      become: true
-      copy:
-        src: /tmp/node_exporter-1.1.2.linux-amd64/node_exporter
+        src: "/tmp/node_exporter.tar.gz"
         dest: /usr/local/bin/node_exporter
         remote_src: yes
         mode: '0777'
+
+
+    # - name: "move binary to /usr/local/bin."
+    #   become: true
+    #   copy:
+    #     src: /tmp/node_exporter-1.1.2.linux-amd64/node_exporter
+    #     dest: /usr/local/bin/node_exporter
+    #     remote_src: yes
+    #     mode: '0777'
         
     - name: "add node exporter configuration."
       become: true
@@ -54,3 +70,28 @@
 
 
   
+
+
+  
+
+# - name: Copy Node Exporter Systemd Service
+#   become: true
+#   copy:
+#     src: "/opt/node_exporter-0.18.1.linux-amd64/node_exporter.service"
+#     dest: "/etc/systemd/system/node_exporter.service"
+#     mode: 0644
+#   tags: node-exporter
+
+# - name: Reload Systemd Daemon
+#   become: true
+#   systemd:
+#     daemon_reload: yes
+#   tags: node-exporter
+
+# - name: Start Node Exporter Service
+#   become: true
+#   service:
+#     name: node_exporter
+#     state: started
+#     enabled: yes
+#   tags: node-exporter
