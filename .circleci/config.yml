@@ -238,13 +238,16 @@ jobs:
           name: Deploy Frontend
           command: |
             export BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-             echo "API_URL=http://$BACKEND_PUBLIC_IP:3030" 
+            echo "${BACKEND_PUBLIC_IP}"
+            export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
+            echo "API_URL = ${API_URL}"
             # Build the frontend
             cd frontend
             echo "API_URL=http://$BACKEND_PUBLIC_IP:3030" > .env
+            cat .env
             npm install
             npm run build:prod
-            aws s3 cp dist s3://udapeople-86a0c --recursive
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
 
                     
   deploy-backend:
@@ -316,7 +319,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --parameter-overrides WorkflowID="86a0c" \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --stack-name InitialStack 
 
 
