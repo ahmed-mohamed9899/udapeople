@@ -68,30 +68,23 @@
     #     name: node_exporter
     #     enabled: yes
 
-
   
 
+    - name: Copy Node Exporter Systemd Service
+      become: true
+      copy:
+        src: "/usr/local/bin/node_exporter-0.18.1.linux-amd64/node_exporter.service"
+        dest: "/etc/systemd/system/node_exporter.service"
+        mode: 0644
 
-  
+    - name: Reload Systemd Daemon
+      become: true
+      systemd:
+        daemon_reload: yes
 
-- name: Copy Node Exporter Systemd Service
-  become: true
-  copy:
-    src: "/usr/local/bin/node_exporter-0.18.1.linux-amd64/node_exporter.service"
-    dest: "/etc/systemd/system/node_exporter.service"
-    mode: 0644
-  tags: node-exporter
-
-- name: Reload Systemd Daemon
-  become: true
-  systemd:
-    daemon_reload: yes
-  tags: node-exporter
-
-- name: Start Node Exporter Service
-  become: true
-  service:
-    name: node_exporter
-    state: started
-    enabled: yes
-  tags: node-exporter
+    - name: Start Node Exporter Service
+      become: true
+      service:
+        name: node_exporter
+        state: started
+        enabled: yes
