@@ -188,24 +188,24 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["0d:a0:d2:30:e7:40:31:70:0e:69:45:04:ad:36:0b:8c"]
-      # - run:
-      #     name: "Install Dependencies"
-      #     command: |
-      #       apk add ansible gzip openssh-client
+          fingerprints: ["27:78:b2:c0:6b:f7:d3:06:95:22:1c:ee:28:56:4f:b3"]
+      - run:
+          name: "Install Dependencies"
+          command: |
+            apk add ansible gzip openssh-client
       # - attach_workspace:
       #     at: ~/
       - run:
           name: Configure server
           command: |
+
             ls
             pwd
             cd .circleci/ansible
             aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt
             cat inventory.txt
-            # ansible-playbook -i inventory.txt configure-server.yml -vv
+            ansible-playbook -i inventory.txt configure-server.yml -vv
             ansible-playbook -i inventory.txt prometheus-exporter.yml -vv
-      # Here's where you will add some code to rollback on failure      
 
   run-migrations:
     docker: 
@@ -255,7 +255,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["0d:a0:d2:30:e7:40:31:70:0e:69:45:04:ad:36:0b:8c"]
+          fingerprints: ["27:78:b2:c0:6b:f7:d3:06:95:22:1c:ee:28:56:4f:b3"]
       - run:
           name: Deploy backend
           command: |
@@ -359,13 +359,13 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      - deploy-infrastructure #:
+      # - deploy-infrastructure:
           # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
           #   branches: 
           #     only: [main]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+      - configure-infrastructure #:
+          # requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
