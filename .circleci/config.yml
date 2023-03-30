@@ -161,7 +161,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
-              --stack-name "backend" \
+              --stack-name "s-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
 
       - run:
@@ -188,7 +188,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["27:78:b2:c0:6b:f7:d3:06:95:22:1c:ee:28:56:4f:b3"]
+          fingerprints: ["2a:22:02:eb:fb:19:e5:14:24:86:6a:fc:f4:82:d2:ac"]
       # - run:
       #     name: "Install Dependencies"
       #     command: |
@@ -258,7 +258,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["27:78:b2:c0:6b:f7:d3:06:95:22:1c:ee:28:56:4f:b3"]
+          fingerprints: ["2a:22:02:eb:fb:19:e5:14:24:86:6a:fc:f4:82:d2:ac"]
       - run:
           name: Deploy backend
           command: |
