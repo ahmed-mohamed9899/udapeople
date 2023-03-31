@@ -43,7 +43,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/6eLY5UTvP4v8SmJrJZREtn/hello)
             echo "$SUCCESS"
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
@@ -201,7 +201,7 @@ jobs:
 
             ls
             pwd
-            cd .circleci/ansible
+            cd .circleci/ansiblei
             aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml -vv
@@ -361,22 +361,22 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      # - deploy-infrastructure:
+      - deploy-infrastructure #:
           # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
           #   branches: 
           #     only: [main]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
-      - deploy-frontend #:
+      # - deploy-frontend:
           # requires: [run-migrations]
-      - deploy-backend #:
+      # - deploy-backend:
           # requires: [run-migrations]
-      - smoke-test :
-          requires: [deploy-backend, deploy-frontend]
-      - cloudfront-update:
-          requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
+      # - smoke-test :
+      #     requires: [deploy-backend, deploy-frontend]
+      # - cloudfront-update:
+      #     requires: [smoke-test]
+      # - cleanup:
+      #     requires: [cloudfront-update]
