@@ -207,7 +207,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml -vv
             ansible-playbook -i inventory.txt prometheus-exporter.yml -vv
       - destroy_environment
-      - revert-migrations      
+      - revert-migrations
 
   run-migrations:
     docker: 
@@ -250,8 +250,11 @@ jobs:
             cat .env
             npm install
             npm run build
-            aws s3 cp dist s3://udapeople-b214875 --recursive
-            # aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            # aws s3 cp dist s3://udapeople-b214875 --recursive
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - destroy_environment
+      - revert-migrations      
+
 
                     
   deploy-backend:
@@ -284,6 +287,8 @@ jobs:
             cd ../.circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+      - destroy_environment
+      - revert-migrations      
 
   smoke-test:
     docker:
@@ -303,8 +308,8 @@ jobs:
               echo "Rolling Back"
               exit 1
             fi
-      # - notify_on_failure
-      # - destroy_environment
+      - destroy_environment
+      - revert-migrations
 
   cloudfront-update:
     docker:
@@ -326,6 +331,9 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --stack-name InitialStack 
+      - destroy_environment
+      - revert-migrations        
+              
 
 
   cleanup:
